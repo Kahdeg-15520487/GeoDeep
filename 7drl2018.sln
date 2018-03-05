@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoStar", "GeoStar\GeoStar.csproj", "{AC757811-34F4-4855-86BC-070225E26C26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReGoap", "ReGoap\ReGoap.csproj", "{C9AFBACD-4C31-446F-9DA4-420CD4E1ABBE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{AC757811-34F4-4855-86BC-070225E26C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC757811-34F4-4855-86BC-070225E26C26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC757811-34F4-4855-86BC-070225E26C26}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9AFBACD-4C31-446F-9DA4-420CD4E1ABBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9AFBACD-4C31-446F-9DA4-420CD4E1ABBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9AFBACD-4C31-446F-9DA4-420CD4E1ABBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9AFBACD-4C31-446F-9DA4-420CD4E1ABBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -125,5 +125,3 @@ C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\System.Xml.XmlSerializer.dll
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\System.Xml.XPath.dll
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\System.Xml.XPath.XDocument.dll
-C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\ReGoap.dll
-C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\ReGoap.pdb
