@@ -1,5 +1,6 @@
 ﻿using GeoStar.Entities;
 using GeoStar.Items;
+using GeoStar.MapObjects;
 using GeoStar.Services;
 using GoRogue;
 using Microsoft.Xna.Framework;
@@ -52,6 +53,7 @@ namespace GeoStar.Screens
                 Position = new Point(5, 5),
                 Dragable = true
             };
+            InventoryViewerWindow.Closed += InventoryViewerWindow_Closed;
             Prompt = new Prompt(12, 5, "Exit?", "Warning")
             {
                 Position = new Point(70, 15)
@@ -173,14 +175,7 @@ namespace GeoStar.Screens
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.I))
             {
                 //show pickup and drop item menu
-                InventoryViewerWindow.Show(
-                    Player.Inventory,
-                    new Inventory()
-                {
-                    new ItemBase("lalc",0),
-                    new ItemBase("lbla",1),
-                    new ItemBase("lclb",2)
-                }, true);
+                InventoryViewerWindow.Show(Player, map, true);
 
                 //lock for empty ground aroung player
                 //if (map.FindEmptyPointAround(Player.Position, out Point emptyPoint))
@@ -193,6 +188,17 @@ namespace GeoStar.Screens
             if (!InventoryViewerWindow.IsVisible && !Prompt.IsVisible && SadConsole.Global.KeyboardState.IsKeyReleased(Keys.Escape))
             {
                 Prompt.Show(true);
+            }
+        }
+
+        private void InventoryViewerWindow_Closed(object sender, EventArgs e)
+        {
+            if (InventoryViewerWindow.DialogResult)
+            {
+                if (map.FindEmptyPointAround(Player.Position, out Point emptyPoint))
+                {
+                    
+                }
             }
         }
 

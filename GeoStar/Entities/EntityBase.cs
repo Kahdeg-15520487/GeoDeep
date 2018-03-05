@@ -1,4 +1,5 @@
-﻿using GeoStar.MapObjects;
+﻿using GeoStar.Items;
+using GeoStar.MapObjects;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using System;
@@ -63,7 +64,7 @@ namespace GeoStar.Entities
             else
             {
                 //mine that wall
-                if (Mine(map, newPosition.X, newPosition.Y, this, out MapObjects.Mineral.MineralType mineralType))
+                if (Mine(map, newPosition.X, newPosition.Y, this, out MapObjects.MineralVein.MineralType mineralType))
                 {
                     //that wall is mined
                     Position = newPosition;
@@ -71,10 +72,10 @@ namespace GeoStar.Entities
             }
         }
 
-        public bool Mine(Map map, int x, int y, EntityBase miner, out Mineral.MineralType minedMineral)
+        public bool Mine(Map map, int x, int y, EntityBase miner, out MineralVein.MineralType minedMineral)
         {
             var cellIndex = y * map.Width + x;
-            minedMineral = Mineral.MineralType.None;
+            minedMineral = MineralVein.MineralType.None;
 
             if (map.Tiles[cellIndex] is Wall)
             {
@@ -82,10 +83,10 @@ namespace GeoStar.Entities
 
                 if ((map.Tiles[cellIndex] as Wall).Heath == 0)
                 {
-                    if (map.Tiles[cellIndex] is Mineral)
+                    if (map.Tiles[cellIndex] is MineralVein)
                     {
                         //get mined mineral
-                        minedMineral = (map.Tiles[cellIndex] as Mineral).Type;
+                        minedMineral = (map.Tiles[cellIndex] as MineralVein).Type;
                         //miner.Inventory.Add(new Items.ItemBase(minedMineral.ToColoredString()));
                         miner.Inventory.Add(new Items.ItemBase(minedMineral.ToString(), 5));
                     }

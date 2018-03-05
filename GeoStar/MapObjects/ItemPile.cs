@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 
 namespace GeoStar.MapObjects
 {
-    class Floor : TileBase
+    class ItemPile : TileBase
     {
-        public Floor() : base(new Color(25, 25, 25), Color.Black, 46)
+        public ItemPile(params ItemBase[] items) : base(Color.White, Color.Black, 15)
         {
             IsBlockingLOS = false;
             IsBlockingMove = false;
 
-            Inventory = new Inventory(10000, 5);
-
-            DefaultForeground = new Color(25, 25, 25);
-            DefaultBackground = Color.Black;
+            Inventory = new Inventory();
+            foreach (var item in items)
+            {
+                Inventory.Add(item);
+            }
         }
 
         public Inventory.InventoryIssue Add(ItemBase item)

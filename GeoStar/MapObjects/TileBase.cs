@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+
 using SadConsole;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using GeoStar.Items;
 
 namespace GeoStar.MapObjects
 {
@@ -13,9 +11,20 @@ namespace GeoStar.MapObjects
         public bool IsBlockingMove;
         public bool IsBlockingLOS;
 
+        public Color DefaultForeground;
+        public Color DefaultBackground;
+
+        public Inventory Inventory { get; protected set; }
+
         public TileBase(Color foreground, Color background, int glyph) : base(foreground, background, glyph)
         {
             IsVisible = false;
+        }
+
+        public virtual void ReColor()
+        {
+            Foreground = DefaultForeground;
+            Background = DefaultBackground;
         }
     }
 }

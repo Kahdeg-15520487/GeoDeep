@@ -22,9 +22,41 @@ namespace GeoStar
             return new Color(c.R * 0.5f, c.G * 0.5f, c.B * 0.5f);
         }
 
-        public static string ToColoredString(this MapObjects.Mineral.MineralType mineralType)
+        public static string GetUntilOrEmpty(this string text, string stopAt = "-")
         {
-            var mcolor = MapObjects.Mineral.MineralColors[mineralType];
+            if (!String.IsNullOrWhiteSpace(text))
+            {
+                int charLocation = text.IndexOf(stopAt, StringComparison.Ordinal);
+
+                if (charLocation > 0)
+                {
+                    return text.Substring(0, charLocation);
+                }
+            }
+
+            return String.Empty;
+        }
+
+        public static string GetFromBackUntilOrEmpty(this string text, char stopAt = ' ')
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return string.Empty;
+            }
+            int i;
+            for (i = text.Length - 1; i >= 0; i--)
+            {
+                if (text[i] == stopAt)
+                {
+                    break;
+                }
+            }
+            return text.Substring(i);
+        }
+
+        public static string ToColoredString(this MapObjects.MineralVein.MineralType mineralType)
+        {
+            var mcolor = MapObjects.MineralVein.MineralColors[mineralType];
 
             return string.Format("[c:r f:{1},{2},{3}]{0}", mineralType, mcolor.R, mcolor.G, mcolor.B);
         }
@@ -118,6 +150,96 @@ namespace GeoStar
                     break;
             }
             return output;
+        }
+
+        public static Tuple<int, int> GetNearbyPoint(int x, int y, Direction d)
+        {
+            int xr = x;
+            int yr = y;
+            switch (d)
+            {
+                case Direction.NorthWest:
+                    xr = x - 1;
+                    yr = y - 1;
+                    break;
+                case Direction.North:
+                    xr = x;
+                    yr = y - 1;
+                    break;
+                case Direction.NorthEast:
+                    xr = x + 1;
+                    yr = y - 1;
+                    break;
+                case Direction.West:
+                    xr = x - 1;
+                    yr = y;
+                    break;
+                case Direction.East:
+                    xr = x + 1;
+                    yr = y;
+                    break;
+                case Direction.SouthWest:
+                    xr = x - 1;
+                    yr = y + 1;
+                    break;
+                case Direction.South:
+                    xr = x;
+                    yr = y + 1;
+                    break;
+                case Direction.SouthEast:
+                    xr = x + 1;
+                    yr = y + 1;
+                    break;
+                default:
+                    break;
+            }
+            return new Tuple<int, int>(xr, yr);
+        }
+    }
+
+    static class HelperMethod
+    {
+        public static void GetNearbyPoint(int x, int y, Direction d, out int xr, out int yr)
+        {
+            xr = x;
+            yr = y;
+            switch (d)
+            {
+                case Direction.NorthWest:
+                    xr = x - 1;
+                    yr = y - 1;
+                    break;
+                case Direction.North:
+                    xr = x;
+                    yr = y - 1;
+                    break;
+                case Direction.NorthEast:
+                    xr = x + 1;
+                    yr = y - 1;
+                    break;
+                case Direction.West:
+                    xr = x - 1;
+                    yr = y;
+                    break;
+                case Direction.East:
+                    xr = x + 1;
+                    yr = y;
+                    break;
+                case Direction.SouthWest:
+                    xr = x - 1;
+                    yr = y + 1;
+                    break;
+                case Direction.South:
+                    xr = x;
+                    yr = y + 1;
+                    break;
+                case Direction.SouthEast:
+                    xr = x + 1;
+                    yr = y + 1;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

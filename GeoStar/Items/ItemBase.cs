@@ -21,7 +21,7 @@ namespace GeoStar.Items
             Weight = 0f;
         }
 
-        public ItemBase(string name,float weight, uint id = 0)
+        public ItemBase(string name, float weight, uint id = 0)
         {
             Name = name;
             Weight = weight;
@@ -30,7 +30,27 @@ namespace GeoStar.Items
 
         public int CompareWeight(ItemBase other)
         {
-            return 0;
+            return Weight.CompareTo(other.Weight);
+        }
+
+        public int CompareName(ItemBase other)
+        {
+            if (string.IsNullOrEmpty(Name))
+            {
+                if (string.IsNullOrEmpty(other.Name))
+                {
+                    return 0;
+                }
+                else return 1;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(other.Name))
+                {
+                    return -1;
+                }
+                else return Name.CompareTo(other.Name);
+            }
         }
 
         public ItemBehaviour ItemBehaviour { get; set; }

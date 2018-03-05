@@ -100,20 +100,20 @@ namespace GeoStar
                 var tileIndex = ns.Y * Width + ns.X;
                 if (Tiles[tileIndex] is Floor)
                 {
-                    Tiles[tileIndex].Foreground = new Color(25, 25, 25);
+                    Tiles[tileIndex].ReColor();
                 }
-                else if (Tiles[tileIndex] is Mineral)
+                else if (Tiles[tileIndex] is MineralVein)
                 {
-                    (Tiles[tileIndex] as Mineral).ReColor();
+                    (Tiles[tileIndex] as MineralVein).ReColor();
                     if (!Tiles[tileIndex].IsVisible)
                     {
                         var mcolor = Tiles[tileIndex].Foreground;
-                        logger.WriteLine("You found a vein of [c:r f:{1},{2},{3}]{0}", (Tiles[tileIndex] as Mineral).Type, mcolor.R, mcolor.G, mcolor.B);
+                        logger.WriteLine("You found a vein of [c:r f:{1},{2},{3}]{0}", (Tiles[tileIndex] as MineralVein).Type, mcolor.R, mcolor.G, mcolor.B);
                     }
                 }
                 else if (Tiles[tileIndex] is Wall)
                 {
-                    Tiles[tileIndex].Foreground = Color.White;
+                    Tiles[tileIndex].ReColor();
                 }
                 Tiles[tileIndex].IsVisible = true;
             }

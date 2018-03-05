@@ -15,6 +15,9 @@ namespace GeoStar.MapObjects
         {
             IsBlockingLOS = true;
             IsBlockingMove = true;
+
+            DefaultForeground = Color.White;
+            DefaultBackground = Color.Gray;
         }
 
         public void Mine()

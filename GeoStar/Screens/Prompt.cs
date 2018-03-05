@@ -54,17 +54,20 @@ namespace GeoStar.Screens
 
         public override void Update(TimeSpan time)
         {
-            //if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.Enter))
-            //{
-            //    DialogResult = true;
-            //    Hide();
-            //}
+            if (IsVisible)
+            {
+                if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.Enter))
+                {
+                    DialogResult = true;
+                    Hide();
+                }
 
-            //if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.Escape))
-            //{
-            //    DialogResult = false;
-            //    Hide();
-            //}
+                if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.Back))
+                {
+                    DialogResult = false;
+                    Hide();
+                }
+            }
 
             base.Update(time);
         }

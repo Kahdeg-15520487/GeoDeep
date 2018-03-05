@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,8 @@
     <AssemblyName>GeoStar</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -42,13 +43,14 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Entities\NPC.cs" />
     <Compile Include="Items\ItemBase.cs" />
     <Compile Include="Items\ItemBehaviour.cs" />
     <Compile Include="Items\ItemDictionary.cs" />
+    <Compile Include="MapObjects\ItemPile.cs" />
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Entities\EntityBase.cs" />
-    <Compile Include="Entities\Inventory.cs" />
-    <Compile Include="Entities\ItemPile.cs" />
+    <Compile Include="Items\Inventory.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="ExtensionMethod.cs" />
     <Compile Include="GameManager.cs" />
@@ -138,6 +140,7 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="C64.font">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -160,6 +163,15 @@
     <Content Include="Yayo_c64.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\AI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReGoap\ReGoap.csproj">
+      <Project>{c9afbacd-4c31-446f-9da4-420cd4e1abbe}</Project>
+      <Name>ReGoap</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
