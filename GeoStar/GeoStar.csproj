@@ -42,25 +42,49 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Items\ItemBase.cs" />
+    <Compile Include="Items\ItemBehaviour.cs" />
+    <Compile Include="Items\ItemDictionary.cs" />
+    <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\Inventory.cs" />
+    <Compile Include="Entities\ItemPile.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="ExtensionMethod.cs" />
     <Compile Include="GameManager.cs" />
+    <Compile Include="Screens\InventoryViewerWindow.cs" />
+    <Compile Include="Screens\NormalButton.cs" />
+    <Compile Include="Screens\Prompt.cs" />
+    <Compile Include="Services\LoggingService.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="MapGenerator.cs" />
     <Compile Include="MapObjects\Floor.cs" />
+    <Compile Include="MapObjects\Mineral.cs" />
     <Compile Include="MapObjects\TileBase.cs" />
     <Compile Include="MapObjects\Wall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Screens\Adventure.cs" />
-    <Compile Include="Screens\Dungeon.cs" />
+    <Compile Include="Screens\AdventureScreen.cs" />
+    <Compile Include="Screens\DungeonScreen.cs" />
+    <Compile Include="Screens\ScrollingConsole.cs" />
+    <Compile Include="Screens\SimplexNoiseViewerScreen.cs" />
+    <Compile Include="Screens\StatusConsole.cs" />
+    <Compile Include="SimplexNoise.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="GoRogue">
+      <HintPath>..\..\GoRogue\GoRogue\bin\Debug\netstandard2.0\GoRogue.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SadConsole, Version=6.4.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SadConsole.6.4.6\lib\net\SadConsole.dll</HintPath>
     </Reference>
+    <Reference Include="netstandard" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -125,12 +149,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GoRogue\GoRogue\GoRogue.csproj">
-      <Project>{12f08073-e6c0-48ae-9848-4bd9ef3f5395}</Project>
-      <Name>GoRogue</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cheepicus_12x12.png">

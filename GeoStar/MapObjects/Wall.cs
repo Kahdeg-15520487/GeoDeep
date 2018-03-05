@@ -9,10 +9,25 @@ namespace GeoStar.MapObjects
 {
     class Wall : TileBase
     {
-        public Wall() : base(Color.White, Color.Gray, 176)
+        public int Heath { get; private set; } = 5;
+
+        public Wall() : base(Color.White, Color.Gray, 178)
         {
             IsBlockingLOS = true;
             IsBlockingMove = true;
+        }
+
+        public void Mine()
+        {
+            Heath--;
+            if (Heath == 3)
+            {
+                Glyph = 177;
+            }
+            else if (Heath == 1)
+            {
+                Glyph = 176;
+            }
         }
     }
 }

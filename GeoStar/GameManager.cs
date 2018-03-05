@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GeoStar.Screens;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -7,12 +8,12 @@ namespace GeoStar
     public class GameManager : SadConsole.Game
     {
 
-        public static int ScreenWidth { get; internal set; } = 80;
-        public static int ScreenHeight { get; internal set; } = 25;
+        public const int SCREEN_WIDTH = 160;
+        public const int SCREEN_HEIGHT = 40;
 
-        internal static Screens.Adventure AdventureScreen;
+        internal static Screens.AdventureScreen AdventureScreen;
 
-        public GameManager() : base("IBM.font", 80, 25, null)
+        public GameManager() : base("IBM.font", SCREEN_WIDTH, SCREEN_HEIGHT, null)
         {
 
         }
@@ -26,13 +27,44 @@ namespace GeoStar
             base.Initialize();
 
             // Create the map
-            AdventureScreen = new Screens.Adventure();
-            AdventureScreen.LoadMap(new Map(100, 100));
-            AdventureScreen.Player = new Entities.Player();
-            AdventureScreen.Player.Position = new Point(13, 7);
-            AdventureScreen.Map.Entities.Add(AdventureScreen.Player);
+            AdventureScreen = new Screens.AdventureScreen();
+            AdventureScreen.LoadMap(MapGenerator.Generate(200, 200));
+            AdventureScreen.SpawnPlayer();
+
+            SadConsole.ControlsConsole startingConsole = new SadConsole.ControlsConsole(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+            var bt1 = new SadConsole.Controls.Button(5);
+            startingConsole.Add(bt1);
+
+            SadConsole.Global.CurrentScreen = startingConsole;
 
             SadConsole.Global.CurrentScreen.Children.Add(AdventureScreen);
+
+            //SimplexNoiseViewer simplexNoiseViewer = new SimplexNoiseViewer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            //simplexNoiseViewer.LoadMap(200, 200, 0.03f);
+            //SadConsole.Global.CurrentScreen = simplexNoiseViewer;
+
+            //SadConsole.Window window = new SadConsole.Window(10, 10);
+            //window.Title = "status";
+            //window.Dragable = true;
+            //window.Show();
+            //SadConsole.Global.CurrentScreen = startingConsole;
+            //SadConsole.Global.CurrentScreen.Children.Add(window);
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            if (!SadConsole.Global.GraphicsDeviceManager.IsFullScreen)
+            {
+                //SadConsole.Settings.ToggleFullScreen();
+            }
+
+            //if (SadConsole.Global.KeyboardState.IsKeyReleased(Keys.Escape))
+            //{
+            //    Instance.Exit();
+            //}
+
+            base.Update(gameTime);
         }
     }
 }

@@ -24,3 +24,7 @@ C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\obj\Debug\GeoStar.csprojResolveAssemblyReference.cache
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\obj\Debug\GeoStar.exe
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\obj\Debug\GeoStar.pdb
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\GoRogue.dll
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\GoRogue.pdb
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\Newtonsoft.Json.dll
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\Newtonsoft.Json.xml

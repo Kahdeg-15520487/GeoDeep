@@ -15,7 +15,7 @@ namespace GeoStar.MapObjects
 
         public TileBase(Color foreground, Color background, int glyph) : base(foreground, background, glyph)
         {
-
+            IsVisible = false;
         }
     }
 }
