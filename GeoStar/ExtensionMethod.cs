@@ -18,6 +18,12 @@ namespace GeoStar
 
     static class ExtensionMethod
     {
+
+        public static int Clamp(this int value, int min, int max)
+        {
+            return value >= max ? max : value <= min ? min : value;
+        }
+
         public static Color Darken(this Color c)
         {
             return new Color(c.R * 0.5f, c.G * 0.5f, c.B * 0.5f);

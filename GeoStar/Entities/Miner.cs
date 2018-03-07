@@ -38,7 +38,7 @@ namespace GeoStar.Entities
         MinerEvaluator evaluator;
 
         AStarDirection astar;
-        Queue<Direction> path;
+        Queue<(Direction, bool)> path;
         FSM<MinerState> fsm;
         public MinerState CurrentAIState { get => fsm.CurrentState; }
         bool isFoundOreVein;
@@ -80,7 +80,7 @@ namespace GeoStar.Entities
                 .GoesTo(MinerState.Idle)
                 .OnEnter(() => beforeMine = Inventory.Clone() as Inventory)
                 .OnLeave(InformMinedMineral)
-                .Calls((e) => { Mine(); });
+                .Calls((e) => { Mine(OreVein); });
 
             fsm.CurrentState = MinerState.Idle;
         }
@@ -112,7 +112,7 @@ namespace GeoStar.Entities
             var result = astar.Run();
             var p = astar.GetPath(map);
 
-            path = new Queue<Direction>();
+            path = new Queue<(Direction, bool)>();
             foreach (var d in p)
             {
                 path.Enqueue(d);
@@ -127,16 +127,31 @@ namespace GeoStar.Entities
                 wanderDirection = (Direction)random.Next(0, 8);
                 logger.WriteLine("Wandering {0}", wanderDirection);
             }
+            if (CheckTile(wanderDirection) is Wall)
+            {
+                Mine(wanderDirection);
+            }
+            else
+            {
+                MoveBy(wanderDirection);
+                wanderDistance--;
+            }
 
-            MoveBy(wanderDirection, map);
-            wanderDistance--;
             UpdateFov();
         }
 
         private void Goto()
         {
-            MoveBy(path.Dequeue(), map);
-            UpdateFov();
+            var d = path.Dequeue();
+            if (d.Item2)
+            {
+                Mine(d.Item1);
+            }
+            else
+            {
+                MoveBy(d.Item1);
+                UpdateFov();
+            }
         }
 
         private bool FindSurroundingOreVein()
@@ -156,9 +171,17 @@ namespace GeoStar.Entities
             return false;
         }
 
-        private void Mine()
+        private void Mine(Direction dir)
         {
-            MoveBy(HelperMethod.GetDirectionFromPointAtoPointB(position.X, position.Y, OreVein.X, OreVein.Y), map);
+            Equip.ItemBehaviour(this, dir, map);
+        }
+
+        private void Mine(Point target)
+        {
+            if (Equip != null && Equip.Name == "Pickaxe")
+            {
+                Equip.ItemBehaviour(this, position.GetDirectionFromPointAtoPointB(target), map);
+            }
         }
 
         private void InformMinedMineral()

@@ -297,7 +297,7 @@ namespace GeoStar.Screens
 
             if (isPlayerMove)
             {
-                Player.MoveBy(direction, map);
+                Player.MoveBy(direction);
                 Player.UpdateFov();
 
                 Miners.ForEach(miner => miner.Act());

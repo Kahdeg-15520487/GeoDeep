@@ -10,7 +10,7 @@ namespace GeoStar.Services
     {
         int Next();
     }
-    class RandomWrapper : IRandomNumberService , GoRogue.Random.IRandom
+    class RandomWrapper : IRandomNumberService, GoRogue.Random.IRandom
     {
         public int Seed { get; private set; }
 
@@ -18,7 +18,7 @@ namespace GeoStar.Services
 
         public RandomWrapper(int seed = -1)
         {
-            if (seed ==-1)
+            if (seed == -1)
             {
                 random = new Random();
             }
@@ -36,9 +36,14 @@ namespace GeoStar.Services
             return random.Next(max);
         }
 
-        public int Next(int min,int max)
+        public int Next(int min, int max)
         {
-            return random.Next(min,max);
+            return random.Next(min, max);
+        }
+
+        public uint NextUint()
+        {
+            return BitConverter.ToUInt32(BitConverter.GetBytes(random.Next()), 0);
         }
     }
 

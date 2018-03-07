@@ -27,9 +27,7 @@ namespace GeoStar.Entities
 
     class EntityBase : SadConsole.GameHelpers.GameObject, IHasID
     {
-        static uint lastID = 0;
-        private uint id;
-        public uint ID { get => id; }
+        public uint ID { get; private set; }
 
         public EntityStatus EntityStatus { get; protected set; }
 
@@ -44,13 +42,13 @@ namespace GeoStar.Entities
         protected RandomWrapper random;
         protected TextWriter logger;
 
+        public ItemBase Equip { get; set; }
+
         public EntityBase(Color foreground, Color background, int glyph, Map map, bool haveVision = false, int visionRange = 20) : base(1, 1)
         {
             Animation.CurrentFrame[0].Foreground = foreground;
             Animation.CurrentFrame[0].Background = background;
             Animation.CurrentFrame[0].Glyph = glyph;
-
-            id = lastID++;
 
             EntityStatus = new EntityStatus();
 
@@ -65,8 +63,13 @@ namespace GeoStar.Entities
                 VisionRange = visionRange;
             }
 
+            Equip = new ItemBase("Pickaxe", 10f);
+            Equip.ItemBehaviour = ItemBehaviourHelper.Mine();
+
             random = RandomNumberServiceLocator.GetService();
             logger = LoggingServiceLocator.GetService();
+
+            ID = random.NextUint();
         }
 
         public virtual void UpdateFov()
@@ -74,12 +77,12 @@ namespace GeoStar.Entities
             fovmap.Calculate(Position.X, Position.Y, VisionRange, Distance.EUCLIDEAN);
         }
 
-        public bool MoveBy(Direction direction, Map map)
+        public bool MoveBy(Direction direction)
         {
-            return MoveBy(direction.GetVector(), map);
+            return MoveBy(direction.GetVector());
         }
 
-        public bool MoveBy(Point change, Map map)
+        public bool MoveBy(Point change)
         {
             var newPosition = Position + change;
 
@@ -93,49 +96,19 @@ namespace GeoStar.Entities
             if (map.IsTileWalkable(newPosition.X, newPosition.Y))
             {
                 Position = newPosition;
+                return true;
             }
-            else
-            {
-                //mine that wall
-                if (Mine(map, newPosition.X, newPosition.Y, this, out MineralVein.MineralType mineralType))
-                {
-                    //that wall is mined
-                    Position = newPosition;
-                }
-                else return false;
-            }
-            return true;
+            return false;
+
         }
 
-        public bool Mine(Map map, int x, int y, EntityBase miner, out MineralVein.MineralType minedMineral)
+        public TileBase CheckTile(Direction dir)
         {
-            var cellIndex = y * map.Width + x;
-            minedMineral = MineralVein.MineralType.None;
-
-            if (map.Tiles[cellIndex] is Wall)
-            {
-                (map.Tiles[cellIndex] as Wall).Mine();
-
-                if ((map.Tiles[cellIndex] as Wall).Heath == 0)
-                {
-                    if (map.Tiles[cellIndex] is MineralVein)
-                    {
-                        //get mined mineral
-                        minedMineral = (map.Tiles[cellIndex] as MineralVein).Type;
-                        //miner.Inventory.Add(new Items.ItemBase(minedMineral.ToColoredString()));
-                        miner.Inventory.Add(new ItemBase(minedMineral.ToString(), 5));
-                    }
-
-                    map.Tiles[cellIndex] = new Floor();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return false;
+            var target = new Point(position.X, position.Y).GetNearbyPoint(dir);
+            var x = target.X;
+            var y = target.Y;
+            var cellIndex = map.GetCellIndex(x, y);
+            return map.Tiles[cellIndex];
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GeoStar.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,7 @@ namespace GeoStar.Items
             ItemDictionary = new Dictionary<string, ItemBase>();
         }
 
-        private uint id;
-        public uint ID { get => id; set => id = value; }
+        public uint ID { get; private set; }
         public string Name { get; set; }
         public float Weight { get; set; }
 
@@ -31,7 +31,7 @@ namespace GeoStar.Items
         {
             Name = name;
             Weight = weight;
-            ID = id;
+            ID = id == 0 ? RandomNumberServiceLocator.GetService().NextUint() : id;
         }
 
         public int CompareWeight(ItemBase other)
@@ -69,7 +69,7 @@ namespace GeoStar.Items
                 // Suitable nullity checks etc, of course :)
                 hash = hash * 23 + Name.GetHashCode();
                 hash = hash * 23 + Weight.GetHashCode();
-                hash = hash * 23 + id.GetHashCode();
+                hash = hash * 23 + ID.GetHashCode();
                 return hash;
             }
         }

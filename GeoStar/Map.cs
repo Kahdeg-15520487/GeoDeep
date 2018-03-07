@@ -133,7 +133,7 @@ namespace GeoStar
 
         public int GetCellIndex(int x, int y)
         {
-            return y * Width + x;
+            return (y * Width + x).Clamp(0, Width * Height);
         }
 
         public Grid2D GetGrid(int startX, int startY, int goalX, int goalY)
