@@ -101,16 +101,25 @@ namespace GeoStar.Screens
 
             gnd.Inventory.ItemAdded += (o, e) =>
             {
-                gnd.Foreground = Color.White;
-                gnd.Glyph = 15;
+                map.Tiles[pos] = new ItemPile(gnd);
+                gnd = map.Tiles[pos] as Floor;
+                gnd.ReColor();
+                //gnd.Foreground = Color.White;
+                //gnd.Glyph = 15;
             };
 
             gnd.Inventory.ItemRemoved += (o, e) =>
             {
                 if (gnd.Inventory.Count() == 0)
                 {
-                    gnd.Foreground = gnd.DefaultForeground;
-                    gnd.Glyph = 46;
+                    map.Tiles[pos] = new Floor
+                    {
+                        Inventory = gnd.Inventory
+                    };
+                    gnd = map.Tiles[pos] as Floor;
+                    gnd.ReColor();
+                    //gnd.Foreground = gnd.DefaultForeground;
+                    //gnd.Glyph = 46;
                 }
             };
 

@@ -10,8 +10,9 @@ namespace GeoStar
     public enum Direction
     {
         NorthWest, North, NorthEast,
-        West, Center, East,
+        West, East,
         SouthWest, South, SouthEast,
+        Center,
         Void
     }
 
@@ -117,6 +118,41 @@ namespace GeoStar
             }
         }
 
+        public static Point GetVector(this Direction d)
+        {
+            Point output = Point.Zero;
+            switch (d)
+            {
+                case Direction.NorthWest:
+                    output = new Point(-1, -1);
+                    break;
+                case Direction.North:
+                    output = new Point(0, -1);
+                    break;
+                case Direction.NorthEast:
+                    output = new Point(+1, -1);
+                    break;
+                case Direction.West:
+                    output = new Point(-1, 0);
+                    break;
+                case Direction.East:
+                    output = new Point(+1, 0);
+                    break;
+                case Direction.SouthWest:
+                    output = new Point(-1, +1);
+                    break;
+                case Direction.South:
+                    output = new Point(0, +1);
+                    break;
+                case Direction.SouthEast:
+                    output = new Point(+1, +1);
+                    break;
+                default:
+                    break;
+            }
+            return output;
+        }
+
         public static Point GetNearbyPoint(this Point p, Direction d)
         {
             Point output = new Point(p.X, p.Y);
@@ -195,6 +231,91 @@ namespace GeoStar
             }
             return new Tuple<int, int>(xr, yr);
         }
+
+        public static IEnumerable<Point> GetNearbyPoints(this Point p)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                yield return p.GetNearbyPoint((Direction)i);
+            }
+        }
+
+        public static Direction GetDirectionFromPointAtoPointB(this Point pA, Point pB)
+        {
+            int deltaX = pA.X - pB.X;
+            int deltaY = pA.Y - pB.Y;
+
+            bool isLeft = false;
+            bool isRight = false;
+            bool isUp = false;
+            bool isDown = false;
+
+            if (deltaX > 0)
+            {
+                isLeft = true;
+            }
+            else
+            {
+                if (deltaX < 0)
+                {
+                    isRight = true;
+                }
+            }
+
+            if (deltaY > 0)
+            {
+                isUp = true;
+            }
+            else
+            {
+                if (deltaY < 0)
+                {
+                    isDown = true;
+                }
+            }
+
+            if (isLeft && isUp)
+            {
+                return Direction.NorthWest;
+            }
+
+            if (isRight && isUp)
+            {
+                return Direction.NorthEast;
+            }
+
+            if (isLeft && isDown)
+            {
+                return Direction.SouthWest;
+            }
+
+            if (isRight && isDown)
+            {
+                return Direction.SouthEast;
+            }
+
+            if (isLeft)
+            {
+                return Direction.West;
+            }
+
+            if (isRight)
+            {
+                return Direction.East;
+            }
+
+            if (isUp)
+            {
+                return Direction.North;
+            }
+
+            if (isDown)
+            {
+                return Direction.South;
+            }
+
+            return Direction.Center;
+        }
     }
 
     static class HelperMethod
@@ -241,5 +362,134 @@ namespace GeoStar
                     break;
             }
         }
+
+        public static Direction GetDirectionFromPointAtoPointB(int pAX, int pAY, int pBX, int pBY)
+        {
+            int deltaX = pAX - pBX;
+            int deltaY = pAY - pBY;
+
+            bool isLeft = false;
+            bool isRight = false;
+            bool isUp = false;
+            bool isDown = false;
+
+            if (deltaX > 0)
+            {
+                isLeft = true;
+            }
+            else
+            {
+                if (deltaX < 0)
+                {
+                    isRight = true;
+                }
+            }
+
+            if (deltaY > 0)
+            {
+                isUp = true;
+            }
+            else
+            {
+                if (deltaY < 0)
+                {
+                    isDown = true;
+                }
+            }
+
+            if (isLeft && isUp)
+            {
+                return Direction.NorthWest;
+            }
+
+            if (isRight && isUp)
+            {
+                return Direction.NorthEast;
+            }
+
+            if (isLeft && isDown)
+            {
+                return Direction.SouthWest;
+            }
+
+            if (isRight && isDown)
+            {
+                return Direction.SouthEast;
+            }
+
+            if (isLeft)
+            {
+                return Direction.West;
+            }
+
+            if (isRight)
+            {
+                return Direction.East;
+            }
+
+            if (isUp)
+            {
+                return Direction.North;
+            }
+
+            if (isDown)
+            {
+                return Direction.South;
+            }
+
+            return Direction.Center;
+        }
+    }
+
+    static class SpiralCoords
+    {
+        public static IEnumerable<Point> GenerateOutTo(this Point point, int radius = 1, bool includeCenter = true)
+        {
+            foreach (int r in Enumerable.Range(includeCenter ? 0 : 1, radius + 1))
+            {
+                foreach (Point p in GenerateRing(point, r))
+                {
+                    yield return p;
+                }
+            }
+        }
+
+        public static IEnumerable<Point> GenerateRing(this Point point, int radius)
+        {
+            Point currentPoint = point + new Point(radius, 0);
+            yield return currentPoint;
+
+            //move up while we can
+            while (currentPoint.Y < radius)
+            {
+                currentPoint.Y += 1;
+                yield return new Point(currentPoint.X, currentPoint.Y);
+            }
+            //move left while we can
+            while (-radius < currentPoint.X)
+            {
+                currentPoint.X -= 1;
+                yield return new Point(currentPoint.X, currentPoint.Y);
+            }
+            //move down while we can
+            while (-radius < currentPoint.Y)
+            {
+                currentPoint.Y -= 1;
+                yield return new Point(currentPoint.X, currentPoint.Y);
+            }
+            //move right while we can
+            while (currentPoint.X < radius)
+            {
+                currentPoint.X += 1;
+                yield return new Point(currentPoint.X, currentPoint.Y);
+            }
+            //move up while we can
+            while (currentPoint.Y < -1)
+            {
+                currentPoint.Y += 1;
+                yield return new Point(currentPoint.X, currentPoint.Y);
+            }
+        }
+
     }
 }

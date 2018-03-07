@@ -1,11 +1,5 @@
-﻿
-using System;
-using System.IO;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 
@@ -13,8 +7,9 @@ using GoRogue;
 
 using GeoStar.MapObjects;
 using GeoStar.Entities;
+using GeoStar.Entities.AI;
 using GeoStar.Services;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace GeoStar
 {
@@ -71,8 +66,6 @@ namespace GeoStar
 
         public TileBase[] Tiles;
 
-        public GoRogue.FOV fovmap;
-
         public Map(int width, int height)
         {
             Width = width;
@@ -85,51 +78,9 @@ namespace GeoStar
             for (int i = 0; i < Tiles.Length; i++)
                 Tiles[i] = new Floor();
 
-            fovmap = new FOV(this);
-
             // Holds all entities on the map
             Entities = new ObservableDictionary<Point, EntityBase>();
-            logger = LoggingServiceLocator.GetLoggingService();
-        }
-
-        public void UpdateFOV(int Px, int Py)
-        {
-            fovmap.Calculate(Px, Py, 20, Distance.EUCLIDEAN);
-            foreach (var ns in fovmap.NewlySeen)
-            {
-                var tileIndex = ns.Y * Width + ns.X;
-                if (Tiles[tileIndex] is Floor)
-                {
-                    Tiles[tileIndex].ReColor();
-                }
-                else if (Tiles[tileIndex] is MineralVein)
-                {
-                    (Tiles[tileIndex] as MineralVein).ReColor();
-                    if (!Tiles[tileIndex].IsVisible)
-                    {
-                        var mcolor = Tiles[tileIndex].Foreground;
-                        logger.WriteLine("You found a vein of [c:r f:{1},{2},{3}]{0}", (Tiles[tileIndex] as MineralVein).Type, mcolor.R, mcolor.G, mcolor.B);
-                    }
-                }
-                else if (Tiles[tileIndex] is Wall)
-                {
-                    Tiles[tileIndex].ReColor();
-                }
-                Tiles[tileIndex].IsVisible = true;
-            }
-
-            foreach (var ns in fovmap.NewlyUnseen)
-            {
-                var tileIndex = ns.Y * Width + ns.X;
-                if (Tiles[tileIndex] is Floor)
-                {
-                    Tiles[tileIndex].Foreground = new Color(10, 10, 10);
-                }
-                else if (Tiles[tileIndex] is Wall)
-                {
-                    Tiles[tileIndex].Foreground = Color.Gray;
-                }
-            }
+            logger = LoggingServiceLocator.GetService();
         }
 
         public bool IsTileWalkable(int x, int y)
@@ -178,6 +129,36 @@ namespace GeoStar
         public bool IsEntityThere(Point p)
         {
             return Entities.ContainsKey(p);
+        }
+
+        public int GetCellIndex(int x, int y)
+        {
+            return y * Width + x;
+        }
+
+        public Grid2D GetGrid(int startX, int startY, int goalX, int goalY)
+        {
+            Grid2D grid = new Grid2D(Width, Height);
+
+            grid[startX, startY] = new GridNode(grid, startX, startY, 0);
+            grid.Start = grid[startX, startY];
+            grid[goalX, goalY] = new GridNode(grid, goalX, goalY, 0);
+            grid.Goal = grid[goalX, goalY];
+
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    if (grid[x, y] != null)
+                    {
+                        continue;
+                    }
+
+                    int index = GetCellIndex(x, y);
+                    grid[x, y] = new GridNode(grid, x, y, Tiles[index] is Floor ? 0 : 1);
+                }
+            }
+            return grid;
         }
 
         public bool FindEmptyPointAround(Point center, out Point result)

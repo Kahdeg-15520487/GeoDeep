@@ -9,23 +9,27 @@ using System.Threading.Tasks;
 
 namespace GeoStar.MapObjects
 {
-    class ItemPile : TileBase
+    class ItemPile : Floor
     {
-        public ItemPile(params ItemBase[] items) : base(Color.White, Color.Black, 15)
+        Floor Floor;
+
+        public ItemPile(Floor floor)
         {
             IsBlockingLOS = false;
             IsBlockingMove = false;
 
-            Inventory = new Inventory();
-            foreach (var item in items)
-            {
-                Inventory.Add(item);
-            }
+            Floor = floor;
+
+            (DefaultForeground, DefaultBackground, Glyph) = (Color.White, Color.Black, 15);
+            Foreground = DefaultForeground;
+            Background = DefaultBackground;
+
+            Inventory = Floor.Inventory;
         }
 
-        public Inventory.InventoryIssue Add(ItemBase item)
+        public override void ReColor()
         {
-            return Inventory.Add(item);
+            base.ReColor();
         }
     }
 }

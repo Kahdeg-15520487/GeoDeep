@@ -1,4 +1,5 @@
 ﻿using GeoStar.Screens;
+using GeoStar.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,7 +16,10 @@ namespace GeoStar
 
         public GameManager() : base("IBM.font", SCREEN_WIDTH, SCREEN_HEIGHT, null)
         {
-
+            //foreach (var p in Point.Zero.GenerateOutTo(0, includeCenter: false))
+            //{
+            //    System.Console.WriteLine(p);
+            //}
         }
 
         protected override void Initialize()
@@ -26,8 +30,12 @@ namespace GeoStar
             // Finish the initialization of SadConsole
             base.Initialize();
 
+            RandomWrapper randomWrapper = new RandomWrapper(2);
+
+            RandomNumberServiceLocator.Provide(randomWrapper);
+
             // Create the map
-            AdventureScreen = new Screens.AdventureScreen();
+            AdventureScreen = new AdventureScreen();
             AdventureScreen.LoadMap(MapGenerator.Generate(200, 200));
             AdventureScreen.SpawnPlayer();
 
@@ -54,9 +62,9 @@ namespace GeoStar
 
         protected override void Update(GameTime gameTime)
         {
-            if (!SadConsole.Global.GraphicsDeviceManager.IsFullScreen)
+            if (!SadConsole.Global.GraphicsDeviceManager.IsFullScreen && SadConsole.Global.KeyboardState.IsKeyReleased(Keys.F5))
             {
-                //SadConsole.Settings.ToggleFullScreen();
+                SadConsole.Settings.ToggleFullScreen();
             }
 
             //if (SadConsole.Global.KeyboardState.IsKeyReleased(Keys.Escape))

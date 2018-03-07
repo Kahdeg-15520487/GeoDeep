@@ -1,4 +1,5 @@
 ﻿using GeoStar.MapObjects;
+using GeoStar.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,21 @@ namespace GeoStar
         {
             Console.WriteLine("generating a {0}x{1} map", w, h);
             Map map = new Map(w, h);
-            GoRogue.MapGeneration.Generators.CellularAutomataGenerator.Generate(map, connectUsingDefault: false);
+            GoRogue.MapGeneration.Generators.CellularAutomataGenerator.Generate(map, RandomNumberServiceLocator.GetService(), connectUsingDefault: false);
             //GoRogue.MapGeneration.Generators.RandomRoomsGenerator.Generate(this, 50, 9, 20, 5);
             SpawnMineral(map, oreProbability);
+
+            //map.Tiles[map.GetCellIndex(5, 5)] = new MineralVein(MineralVein.MineralType.Copper);
 
             return map;
         }
 
         struct OreSpawnSetting
         {
-            public OreSpawnSetting(MineralVein.MineralType oretype, int maxspawncount, int veinmaxlength, int spawnprobability) : this()
+            public OreSpawnSetting(MineralVein.MineralType oretype, int maxspawncount, int maxspawntry, int veinmaxlength, int spawnprobability) : this()
             {
                 OreType = oretype;
+                MaxSpawnTry = maxspawntry;
                 MaxSpawnCount = maxspawncount;
                 MaxVeinLength = veinmaxlength;
                 SpawnProbability = spawnprobability;
@@ -34,26 +38,28 @@ namespace GeoStar
             public int MaxSpawnCount { get; set; }
             public int MaxVeinLength { get; set; }
             public int SpawnProbability { get; set; }
+            public int MaxSpawnTry { get; private set; }
         }
 
         private static void SpawnMineral(Map map, float oreProbability)
         {
             List<OreSpawnSetting> list = new List<OreSpawnSetting>()
             {
-                new OreSpawnSetting(MineralVein.MineralType.Rock,150,10,60),
-                new OreSpawnSetting(MineralVein.MineralType.Coal,100,7,60),
-                new OreSpawnSetting(MineralVein.MineralType.Copper,60,5,60),
-                new OreSpawnSetting(MineralVein.MineralType.Tin,60,5,40),
-                new OreSpawnSetting(MineralVein.MineralType.Iron,40,5,30),
-                new OreSpawnSetting(MineralVein.MineralType.MetalCrystal,20,3,15),
-                new OreSpawnSetting(MineralVein.MineralType.WaterCrystal,20,3,15)
+                new OreSpawnSetting(MineralVein.MineralType.Rock,150,int.MaxValue,10,60),
+                new OreSpawnSetting(MineralVein.MineralType.Coal,100,int.MaxValue,7,60),
+                new OreSpawnSetting(MineralVein.MineralType.Copper,60,int.MaxValue,5,60),
+                new OreSpawnSetting(MineralVein.MineralType.Tin,60,int.MaxValue,5,40),
+                new OreSpawnSetting(MineralVein.MineralType.Iron,40,int.MaxValue,5,30),
+                new OreSpawnSetting(MineralVein.MineralType.MetalCrystal,20,int.MaxValue,3,15),
+                new OreSpawnSetting(MineralVein.MineralType.WaterCrystal,20,int.MaxValue,3,15)
             };
 
-            Random random = new Random();
+            var random = RandomNumberServiceLocator.GetService();
             foreach (var ore in list)
             {
                 int spawncount = 0;
-                while (spawncount < ore.MaxSpawnCount)
+                int spawntry = 0;
+                while (spawntry < ore.MaxSpawnTry && spawncount < ore.MaxSpawnCount)
                 {
                     int x = random.Next(0, map.Width);
                     int y = random.Next(0, map.Height);
@@ -65,6 +71,7 @@ namespace GeoStar
                             spawncount += SpawnOreVein(x, y, ore);
                         }
                     }
+                    spawntry++;
                 }
                 Console.WriteLine("spawned {1} {0} cell", ore.OreType, spawncount);
             }

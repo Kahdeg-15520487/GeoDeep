@@ -14,73 +14,73 @@ namespace GeoStar.Screens
 {
     class PlayerStatus
     {
-    //    public int Width { get; private set; }
-    //    public int Height { get; private set; }
+        //    public int Width { get; private set; }
+        //    public int Height { get; private set; }
 
-    //    public ObservableCollection<EntityBase> Entities;
-    //    public Cell[] Cells { get; private set; }
+        //    public ObservableCollection<EntityBase> Entities;
+        //    public Cell[] Cells { get; private set; }
 
-    //    private Player Player;
+        //    private Player Player;
 
-    //    public PlayerStatus(Player player)
-    //    {
-    //        Player = player;
-    //        Width = 27;
-    //        Height = 19;
+        //    public PlayerStatus(Player player)
+        //    {
+        //        Player = player;
+        //        Width = 27;
+        //        Height = 19;
 
-    //        // Create our tiles for the map
-    //        Cells = new Cell[Width * Height];
+        //        // Create our tiles for the map
+        //        Cells = new Cell[Width * Height];
 
-    //        // Fill the map with floors.
-    //        for (int i = 0; i < Cells.Length; i++)
-    //            Cells[i] = new Cell(Color.Green, Color.Black);
+        //        // Fill the map with floors.
+        //        for (int i = 0; i < Cells.Length; i++)
+        //            Cells[i] = new Cell(Color.Green, Color.Black);
 
-    //        var ct = new[]
-    //        {
-    //            @"_______",
-    //            @"|     |",
-    //            @"| [H] |",
-    //            @"|_____|",
-    //            @"  | |",
-    //            @"=============",
-    //            @"//  |     |  \\",
-    //            @"   [LAL]  |     |  [RAL]",
-    //            @"    //    | [D] |    \\",
-    //            @"  [LH]    |     |    [RH]",
-    //            @"|     |",
-    //            @"=======",
-    //            @"  //    \\",
-    //            @" //      \\",
-    //            @"     [LLL]      [RLL]",
-    //            @"//          \\",
-    //            @"     //            \\",
-    //            @"   [LF]            [RF]"
-    //        };
+        //        var ct = new[]
+        //        {
+        //            @"_______",
+        //            @"|     |",
+        //            @"| [H] |",
+        //            @"|_____|",
+        //            @"  | |",
+        //            @"=============",
+        //            @"//  |     |  \\",
+        //            @"   [LAL]  |     |  [RAL]",
+        //            @"    //    | [D] |    \\",
+        //            @"  [LH]    |     |    [RH]",
+        //            @"|     |",
+        //            @"=======",
+        //            @"  //    \\",
+        //            @" //      \\",
+        //            @"     [LLL]      [RLL]",
+        //            @"//          \\",
+        //            @"     //            \\",
+        //            @"   [LF]            [RF]"
+        //        };
 
-    //        for (int i = 0; i < ct.Length; i++)
-    //        {
-    //            SetCells(ct[i], i);
-    //        }
+        //        for (int i = 0; i < ct.Length; i++)
+        //        {
+        //            SetCells(ct[i], i);
+        //        }
 
-    //        // Holds all entities on the map
-    //        Entities = new ObservableCollection<EntityBase>();
+        //        // Holds all entities on the map
+        //        Entities = new ObservableCollection<EntityBase>();
 
 
-    //    }
+        //    }
 
-    //    private void SetCells(string cells, int line, int startIndex = 0, int endIndex = -1)
-    //    {
+        //    private void SetCells(string cells, int line, int startIndex = 0, int endIndex = -1)
+        //    {
 
-    //        if (endIndex == -1)
-    //        {
-    //            endIndex = cells.Length;
-    //        }
+        //        if (endIndex == -1)
+        //        {
+        //            endIndex = cells.Length;
+        //        }
 
-    //        for (int i = startIndex; i < endIndex; i++)
-    //        {
-    //            Cells[line * Width + i].Glyph = cells[i];
-    //        }
-    //    }
+        //        for (int i = startIndex; i < endIndex; i++)
+        //        {
+        //            Cells[line * Width + i].Glyph = cells[i];
+        //        }
+        //    }
     }
 
     class StatusConsole : SadConsole.ControlsConsole
@@ -89,6 +89,8 @@ namespace GeoStar.Screens
 
         public int Width { get; private set; }
         public int Height { get; private set; }
+
+        public Player Player { get; set; }
 
         public StatusConsole(int screenX, int screenY, int screenWidth, int screenHeight) : base(screenWidth, screenHeight)
         {
@@ -230,19 +232,9 @@ namespace GeoStar.Screens
             base.Renderer.Render(borderSurface);
         }
 
-        public void LoadPlayerStatus(PlayerStatus playerStatus)
-        {
-
-
-            // Create a surface for drawing. It uses the tiles from a map object.
-            //surface = new BasicSurface(playerStatus.Width, playerStatus.Height, playerStatus.Cells, Global.FontDefault, new Rectangle(0, 0, Width, Height));
-
-            //drawCall = new DrawCallSurface(surface, position, false);
-        }
-
         public override void Update(TimeSpan time)
         {
-            
+            Print(0, 0, string.Format("{0}x{1}", Player.Position.X, Player.Position.Y));
 
             base.Update(time);
         }

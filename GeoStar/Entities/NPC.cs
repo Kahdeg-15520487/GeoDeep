@@ -9,7 +9,12 @@ namespace GeoStar.Entities
 {
     class NPC : EntityBase
     {
-        public NPC(int glyph) : base(Color.Orange, Color.Black, glyph)
+        public NPC(Color foreground, Color background, int glyph, Map map, bool haveVision, int visionRange) : base(foreground, background, glyph, map, haveVision, visionRange)
+        {
+
+        }
+
+        public virtual void Act()
         {
 
         }

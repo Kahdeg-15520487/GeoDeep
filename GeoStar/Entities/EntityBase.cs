@@ -1,9 +1,11 @@
 ﻿using GeoStar.Items;
 using GeoStar.MapObjects;
+using GeoStar.Services;
 using GoRogue;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +35,16 @@ namespace GeoStar.Entities
 
         public Inventory Inventory { get; protected set; }
 
-        public EntityBase(Color foreground, Color background, int glyph) : base(1, 1)
+        public bool HaveVision = false;
+        public int VisionRange = 20;
+        protected Map map;
+        protected FOV fovmap;
+        bool isMoved = false;
+
+        protected RandomWrapper random;
+        protected TextWriter logger;
+
+        public EntityBase(Color foreground, Color background, int glyph, Map map, bool haveVision = false, int visionRange = 20) : base(1, 1)
         {
             Animation.CurrentFrame[0].Foreground = foreground;
             Animation.CurrentFrame[0].Background = background;
@@ -44,16 +55,38 @@ namespace GeoStar.Entities
             EntityStatus = new EntityStatus();
 
             Inventory = new Inventory(EntityStatus.MaxWeight);
+
+            this.map = map;
+
+            HaveVision = haveVision;
+            if (HaveVision)
+            {
+                fovmap = new FOV(map);
+                VisionRange = visionRange;
+            }
+
+            random = RandomNumberServiceLocator.GetService();
+            logger = LoggingServiceLocator.GetService();
         }
 
-        public void MoveBy(Point change, Map map)
+        public virtual void UpdateFov()
+        {
+            fovmap.Calculate(Position.X, Position.Y, VisionRange, Distance.EUCLIDEAN);
+        }
+
+        public bool MoveBy(Direction direction, Map map)
+        {
+            return MoveBy(direction.GetVector(), map);
+        }
+
+        public bool MoveBy(Point change, Map map)
         {
             var newPosition = Position + change;
 
             if (newPosition.X < 0 || newPosition.X >= map.Width
              || newPosition.Y < 0 || newPosition.Y >= map.Height)
             {
-                return;
+                return false;
             }
 
             // Check the map if we can move to this new position
@@ -64,12 +97,14 @@ namespace GeoStar.Entities
             else
             {
                 //mine that wall
-                if (Mine(map, newPosition.X, newPosition.Y, this, out MapObjects.MineralVein.MineralType mineralType))
+                if (Mine(map, newPosition.X, newPosition.Y, this, out MineralVein.MineralType mineralType))
                 {
                     //that wall is mined
                     Position = newPosition;
                 }
+                else return false;
             }
+            return true;
         }
 
         public bool Mine(Map map, int x, int y, EntityBase miner, out MineralVein.MineralType minedMineral)
@@ -88,7 +123,7 @@ namespace GeoStar.Entities
                         //get mined mineral
                         minedMineral = (map.Tiles[cellIndex] as MineralVein).Type;
                         //miner.Inventory.Add(new Items.ItemBase(minedMineral.ToColoredString()));
-                        miner.Inventory.Add(new Items.ItemBase(minedMineral.ToString(), 5));
+                        miner.Inventory.Add(new ItemBase(minedMineral.ToString(), 5));
                     }
 
                     map.Tiles[cellIndex] = new Floor();

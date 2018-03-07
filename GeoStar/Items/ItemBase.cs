@@ -9,6 +9,12 @@ namespace GeoStar.Items
 {
     class ItemBase
     {
+        public static Dictionary<string, ItemBase> ItemDictionary;
+        public static void LoadItemDictionary()
+        {
+            ItemDictionary = new Dictionary<string, ItemBase>();
+        }
+
         private uint id;
         public uint ID { get => id; set => id = value; }
         public string Name { get; set; }

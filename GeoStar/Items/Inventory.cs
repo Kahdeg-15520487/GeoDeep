@@ -113,10 +113,8 @@ namespace GeoStar.Items
         }
     }
 
-    class Inventory : IEnumerable<ItemSlot>
+    class Inventory : IEnumerable<ItemSlot>, ICloneable
     {
-        public static ItemDictionary ItemDict;
-
         internal enum SortStrategy
         {
             ByName,
@@ -299,6 +297,23 @@ namespace GeoStar.Items
             return target.Add(item.Item, item.Amount);
         }
 
+        public IEnumerable<ItemSlot> CompareTo(Inventory other)
+        {
+            foreach (var itemName in ItemsNameLookUp.Keys)
+            {
+                var itemSlot = Items[ItemsNameLookUp[itemName]];
+                if (other.Contain(itemName))
+                {
+                    var diffAmount = itemSlot.Amount - other.Peek(itemName);
+                    if (diffAmount > 0)
+                    {
+                        yield return new ItemSlot(itemSlot.Item, diffAmount);
+                    }
+                }
+                else yield return itemSlot;
+            }
+        }
+
         public IEnumerable<ItemBase> QuerryItem(Predicate<ItemBase> querry)
         {
             foreach (var item in Items)
@@ -390,6 +405,20 @@ namespace GeoStar.Items
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public object Clone()
+        {
+            var clonedItems = new ItemSlot[Items.Length];
+            for (int i = 0; i < Items.Length; i++)
+            {
+                clonedItems[i] = new ItemSlot(Items[i].Item, Items[i].Amount);
+            }
+            return new Inventory(MaxWeight, MaxSlot, SortMethod)
+            {
+                Items = clonedItems,
+                ItemsNameLookUp = new ObservableDictionary<string, int>(ItemsNameLookUp)
+            };
         }
     }
 }

@@ -43,7 +43,7 @@ namespace GeoStar.Services
             int x = scrollingConsole.mainConsole.VirtualCursor.Position.X;
             int y = scrollingConsole.mainConsole.VirtualCursor.Position.Y;
 
-            scrollingConsole.mainConsole.Print(0, y++, value.ToString());
+            scrollingConsole.mainConsole.Print(0, y++, value.ToString().PadRight(scrollingConsole.mainConsole.Width));
             scrollingConsole.mainConsole.VirtualCursor.Position = new Point(0, y);
         }
 
@@ -55,12 +55,12 @@ namespace GeoStar.Services
 
     class LoggingServiceLocator
     {
-        public static TextWriter GetLoggingService() => loggingService;
-        private static TextWriter loggingService;
+        public static TextWriter GetService() => service;
+        private static TextWriter service;
 
         public static void Provide(TextWriter logger)
         {
-            loggingService = logger;
+            service = logger;
         }
     }
 }

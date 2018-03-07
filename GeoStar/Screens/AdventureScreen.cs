@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace GeoStar.Screens
         private Map map;
 
         public Player Player;
+        public List<Miner> Miners;
         public DungeonScreen DungeonScreen;
         public StatusConsole StatusScreen;
         public ScrollingConsole ScrollingConsole;
@@ -46,7 +48,7 @@ namespace GeoStar.Screens
         {
             DungeonScreen = new DungeonScreen(0, 0, 100, 39, SadConsole.Global.Fonts["IBM"].GetFont(SadConsole.Font.FontSizes.One));
             StatusScreen = new StatusConsole(110, 2, 40, 19);
-            ScrollingConsole = new ScrollingConsole(40, 15, 100);
+            ScrollingConsole = new ScrollingConsole(40, 15, 10000);
             ScrollingConsole.Position = new Point(110, 22);
             InventoryViewerWindow = new InventoryViewerWindow()
             {
@@ -73,6 +75,9 @@ namespace GeoStar.Screens
 
             Logger logger = new Logger(ScrollingConsole);
             LoggingServiceLocator.Provide(logger);
+            this.logger = LoggingServiceLocator.GetService();
+
+            this.random = RandomNumberServiceLocator.GetService();
         }
 
         public void LoadMap(Map map)
@@ -94,27 +99,57 @@ namespace GeoStar.Screens
 
         public void SpawnPlayer()
         {
+            Player = null;
             for (int x = 0; x < map.Width; x++)
             {
                 for (int y = 0; y < map.Height; y++)
                 {
                     if (map.IsTileWalkable(x, y))
                     {
-                        Player = new Player()
+                        Player = new Player(map)
                         {
                             Position = new Point(x, y)
                         };
-                        break;
                     }
                 }
+                if (Player != null)
+                {
+                    break;
+                }
             }
-            map.UpdateFOV(Player.Position.X, Player.Position.Y);
+            Player.UpdateFov();
             MapViewPoint = new Point(Player.Position.X - DungeonScreen.Width / 2, Player.Position.Y - DungeonScreen.Height / 2);
 
-            PlayerStatus = new PlayerStatus();
-            StatusScreen.LoadPlayerStatus(PlayerStatus);
+            StatusScreen.Player = Player;
 
             map.AddEntity(Player);
+
+            Miners = new List<Miner>();
+
+            //while (Miners.Count < 1)
+            //{
+            //    var posX = random.Next(0, map.Width);
+            //    var posY = random.Next(0, map.Height);
+            //    var pos = map.GetCellIndex(posX, posY);
+            //    if (map.Tiles[pos] is Floor)
+            //    {
+            //        Miners.Add(new Miner(map)
+            //        {
+            //            Position = new Point(posX, posY)
+            //        });
+            //    }
+            //}
+
+            Miners.Add(new Miner(map)
+            {
+                Position = new Point(Player.Position.X + 5, Player.Position.Y)
+            });
+
+            foreach (var miner in Miners)
+            {
+                miner.UpdateFov();
+                map.AddEntity(miner);
+            }
         }
 
         private void Entities_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -154,11 +189,12 @@ namespace GeoStar.Screens
             }
         }
 
-        bool isPlayerMove = true;
+        bool isPlayerMove = false;
+        private TextWriter logger;
+        private RandomWrapper random;
+
         public override void Update(TimeSpan timeElapsed)
         {
-            base.Update(timeElapsed);
-
             if (!InventoryViewerWindow.IsVisible)
             {
                 HandlePlayerMovement();
@@ -166,11 +202,6 @@ namespace GeoStar.Screens
 
             MapViewPoint = new Point(Player.Position.X - DungeonScreen.Width / 2, Player.Position.Y - DungeonScreen.Height / 2);
 
-            if (isPlayerMove)
-            {
-                map.UpdateFOV(Player.Position.X, Player.Position.Y);
-                isPlayerMove = false;
-            }
 
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.I))
             {
@@ -189,6 +220,8 @@ namespace GeoStar.Screens
             {
                 Prompt.Show(true);
             }
+
+            base.Update(timeElapsed);
         }
 
         private void InventoryViewerWindow_Closed(object sender, EventArgs e)
@@ -197,7 +230,7 @@ namespace GeoStar.Screens
             {
                 if (map.FindEmptyPointAround(Player.Position, out Point emptyPoint))
                 {
-                    
+
                 }
             }
         }
@@ -206,6 +239,7 @@ namespace GeoStar.Screens
         {
             var kbs = SadConsole.Global.KeyboardState;
             Point direction = Point.Zero;
+            isPlayerMove = false;
 
             // Handle keyboard when this screen is being run
             if (kbs.IsKeyPressed(Keys.Left) || kbs.IsKeyPressed(Keys.NumPad4))
@@ -256,10 +290,23 @@ namespace GeoStar.Screens
                 isPlayerMove = true;
             }
 
+            if (kbs.IsKeyPressed(Keys.Space))
+            {
+                isPlayerMove = true;
+            }
+
             if (isPlayerMove)
             {
                 Player.MoveBy(direction, map);
+                Player.UpdateFov();
+
+                Miners.ForEach(miner => miner.Act());
+
+                isPlayerMove = false;
+                turnCount++;
             }
         }
+
+        int turnCount = 0;
     }
 }

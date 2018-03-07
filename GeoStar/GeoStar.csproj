@@ -43,10 +43,15 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Entities\AI\AStarDirection.cs" />
+    <Compile Include="Entities\AI\Grid2D.cs" />
+    <Compile Include="Entities\AI\GridNode.cs" />
+    <Compile Include="Entities\Miner.cs" />
     <Compile Include="Entities\NPC.cs" />
+    <Compile Include="Items\IEvaluator.cs" />
     <Compile Include="Items\ItemBase.cs" />
     <Compile Include="Items\ItemBehaviour.cs" />
-    <Compile Include="Items\ItemDictionary.cs" />
+    <Compile Include="Items\Weapon.cs" />
     <Compile Include="MapObjects\ItemPile.cs" />
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Entities\EntityBase.cs" />
@@ -71,23 +76,28 @@
     <Compile Include="Screens\ScrollingConsole.cs" />
     <Compile Include="Screens\SimplexNoiseViewerScreen.cs" />
     <Compile Include="Screens\StatusConsole.cs" />
+    <Compile Include="Services\RandomNumberService.cs" />
     <Compile Include="SimplexNoise.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GoRogue">
-      <HintPath>..\..\GoRogue\GoRogue\bin\Debug\netstandard2.0\GoRogue.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Priority Queue, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OptimizedPriorityQueue.4.1.1\lib\net45\Priority Queue.dll</HintPath>
+    </Reference>
     <Reference Include="SadConsole, Version=6.4.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SadConsole.6.4.6\lib\net\SadConsole.dll</HintPath>
     </Reference>
     <Reference Include="netstandard" />
     <Reference Include="System" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +150,9 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Aesomatica.font">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="C64.font">
@@ -154,6 +167,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Aesomatica16x16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Cheepicus_12x12.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -165,8 +181,20 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities\AI\" />
+    <ProjectReference Include="..\..\astar.cs\astar.cs\astar.cs.csproj">
+      <Project>{041c3984-189b-45e4-b427-43861b4e4433}</Project>
+      <Name>astar.cs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FSMsharp\src\FSMSharp\FSMSharp\FSMSharp.csproj">
+      <Project>{1fcf8369-9e3b-42ea-8c31-6f3991d149ba}</Project>
+      <Name>FSMSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GoRogue\GoRogue\GoRogue.csproj">
+      <Project>{8efd5b05-b49e-4f13-84a1-d1374a64ba33}</Project>
+      <Name>GoRogue</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

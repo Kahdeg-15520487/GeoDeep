@@ -125,3 +125,12 @@ C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\System.Xml.XmlSerializer.dll
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\System.Xml.XPath.dll
 C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\System.Xml.XPath.XDocument.dll
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\FSMSharp.dll
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\FSMSharp.pdb
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\Priority Queue.dll
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\Priority Queue.pdb
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\Priority Queue.xml
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\astar.cs.dll
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\astar.cs.pdb
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\Aesomatica.font
+C:\Users\MINH-LAPTOP\Documents\Visual Studio 2017\Workspace\c#\7drl2018\GeoStar\bin\DesktopGL\AnyCPU\Debug\Aesomatica16x16.png
